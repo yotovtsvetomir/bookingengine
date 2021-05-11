@@ -4,28 +4,31 @@ The test project won't be used in any real environment.
 
 ## Summary:
 
-Create DJANGO Project with DJANGO REST framework for:
-- the main listing object could be a single unit (Apartment) or a multi-unit (Hotel)
-    - single unit have booking information (price) directly connected to it.
-    - multi units have booking information (price) connected to each of the children.
-- filtering through Hotels/Apartments that returns JSON response with available units based on search criteria.
-- the solution should be able to handle large dataset of units.
+Extend Django Project with Django REST Framework for a simple prebuild booking app that have:
+- Listing object with two types - **booking_engine.models** :
+    - Apartment(single_unit) have booking information (price) directly connected to it.
+    - Hotels(multi-unit) have booking information (price) connected to each of their HotelRoomTypes.
+- filtering through Listings and returning JSON response with available units based on search criterias.
+- should handle large dataset of Listings.
 
-1. There is pre-build structure for Hotels/Apartments (could be changed/extended). With prefilled database.
+1. There is a pre-build structure for Hotels/Apartments (could be changed or extended). Database is prefilled with information - **db.sqlite3**.
     - superuser
         - username: **admin**
         - password: **admin**
 
-2. We should be able to block days (already booked days) for each Apartment or HotelRoomType.
-    - new Model for BlockedDays is needed
+2. We should be able to **block days** ( make reservations ) for each **Apartment** or **HotelRoom**.
+    - **new** Model for blocked (reserved) days must be created
 
-3. We need endpoint where we will get available Apartments and Hotels based on:
-	- date range ( from 2021-12-09 to 2021-12-12) and max_price (100):
-		- Apartment should not have any blocked day inside the range and should have price lower than max_price.
+3. NEW **endpoint** where we will get available Apartments and Hotels based on:
+	- **available days** (date range ex.: "from 2021-12-09 to 2021-12-12")
+            - Apartment should not have any blocked day inside the range
+            - Hotel should have at least 1 Hotel Room available from any of the HotelRoomTypes
+     - **max_price** (100):
+		- Apartment price must be lower than max_price.
 		- Hotel should have at least 1 Hotel Room without any blocked days in the range with price lower than max_price.
 
-	- returned objects should be SORTED from lowest to highest price.
-		- for hotels we should use the lowest AVAILABLE room_type price.
+	- returned objects should be **sorted** from lowest to highest price.
+		-  hotels should display the price of the **cheapest HotelRoomType** with **available HotelRoom**.
 
 
 ## Initial Project setup
