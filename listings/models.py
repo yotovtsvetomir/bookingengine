@@ -20,7 +20,7 @@ class Listing(models.Model):
 
     def __str__(self):
         return self.title
-    
+
 
 class HotelRoomType(models.Model):
     hotel = models.ForeignKey(
@@ -37,6 +37,13 @@ class HotelRoomType(models.Model):
 
 
 class HotelRoom(models.Model):
+    hotel = models.ForeignKey(
+        Listing,
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE,
+        related_name='hotel_rooms'
+    )
     hotel_room_type = models.ForeignKey(
         HotelRoomType,
         blank=True,
@@ -48,6 +55,36 @@ class HotelRoom(models.Model):
 
     def __str__(self):
         return self.room_number
+
+
+class Reservation(models.Model):
+    listing = models.ForeignKey(
+        Listing,
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE,
+        related_name='reservations'
+    )
+    hotel_room = models.ForeignKey(
+        HotelRoom,
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE,
+        related_name='reservations'
+    )
+    reserved_from = models.DateField(
+        blank=True,
+        null=True,
+        default=None
+    )
+    reserved_to = models.DateField(
+        blank=True,
+        null=True,
+        default=None
+    )
+
+    def __str__(self):
+        return f'{self.reserved_from} - {self.reserved_to}'
 
 
 class BookingInfo(models.Model):
@@ -72,5 +109,5 @@ class BookingInfo(models.Model):
             obj = self.listing
         else:
             obj = self.hotel_room_type
-            
+
         return f'{obj} {self.price}'
