@@ -61,7 +61,7 @@ class ListingViewSet(viewsets.ModelViewSet):
                                                                         reserved_to__gte=reserved_to))
                         ).order_by('booking_info__price')[0].booking_info
                         listing.booking_info.save()
-                else:
+                elif reserved_from != None and reserved_to != None:
                     # Getting the cheapest available room to display in the listing
                     listing.booking_info = listing.hotel_room_types.filter(
                         hotel_rooms__in=listing.hotel_rooms.exclude(reservations__in=listing.reservations.filter(
